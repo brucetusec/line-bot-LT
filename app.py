@@ -35,12 +35,6 @@ def callback():
 
     return 'OK'
 
-@app.route("/callback2", methods=['POST'])
-def callback2():
-    # Get request body as text
-    body = request.get_data(as_text=True)    
-    return handle_message2(body)
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     text = event.message.text
@@ -97,53 +91,5 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=reply))
 
-def handle_message2(text):
-    first_word = re.sub(r'(\d)(\D)', r'\1 \2', text+"").strip().split()[0]    
-    zones = ["第一區", "第三區", "第四區"]    
-    zone_fit = False
-    for zone in zones:
-        if not zone in numbers:
-            print('init zone:', zone)
-            numbers[zone] = {}
-
-        if not zone_fit and "小幫手" in text and zone + "舊巢" in text:
-            zone_fit = True
-
-            numbers[zone] = {}
-            # remember the numbers
-            nums = text.split()[1:]
-            for num in nums:
-                numbers[zone][num] = 0
-            reply = "OK"
-            print("[debug]", text, "OK", numbers)
-
-        if not zone_fit and "小幫手" in text and zone + "?" in text:
-            zone_fit = True
-
-            print("[debug] text:text:text:text:", text)
-            # respond with numbers that haven't been found yet
-            not_found = [num for num, found in numbers[zone].items() if found == 0]
-            reply = zone + "還沒做的巢：" + " ".join(not_found)
-            break
-    if zone_fit:
-        pass
-        
-    else:
-        for zone in zones:
-            if first_word in numbers[zone]:
-                # mark the numbers as found
-                numbers[zone][first_word] = 1
-                print("numbers[" + zone + "][" + first_word + "] = 1")
-                reply = "OK"
-
-
-        reply = ("你可以用的指令:\r\n" +
-            "1)小幫手 第一區舊巢 N1 N2 N3...\r\n" +
-            "2)小幫手 第一區?\r\n")
-
-    if "小幫手" in text:
-        print("line_bot_api.reply_message:", reply)
-        return reply
-    return ""
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=6601)
