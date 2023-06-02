@@ -1,0 +1,9 @@
+The env
+mkidir ~/env
+cd ~/env/
+python3 -m venv line-bot-LT
+source ~/env/line-bot-LT/bin/activate
+cd ~/line-bot-LT/
+
+Install requirements
+pip install flask line-bot-sdk
