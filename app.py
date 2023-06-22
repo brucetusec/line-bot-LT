@@ -20,7 +20,8 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
 numbers = {}
-
+bot_state = {}
+bot_state["last_reply"] = ""
 @app.route("/callback", methods=['POST'])
 def callback():
     # Get X-Line-Signature header value
@@ -37,10 +38,11 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    text = event.message.text
+    text = (event.message.text + "").upper()
     first_word = (text+"").strip().split()[0]
-    zones = ["第一區", "第三區", "第四區"]    
+    zones = ["第二區上", "第二區下", "GPS", "第四區"]    
     zone_fit = False
+    send_replay = False
     for zone in zones:
         if not zone in numbers:
             print('init zone:', zone)
@@ -55,8 +57,8 @@ def handle_message(event):
             for num in nums:
                 if not num==zone + "舊巢":
                     numbers[zone][num] = 0
+            send_replay = True
             reply = "OK"
-            print("[debug]", text, "OK", numbers)
 
         if not zone_fit and "小幫手" in text and (
                 zone + "?" in text or 
@@ -64,11 +66,14 @@ def handle_message(event):
                 zone == text[-len(zone):]
             ):
             zone_fit = True
-
-            print("[debug] text:text:text:text:", text)
             # respond with numbers that haven't been found yet
             not_found = [num for num, found in numbers[zone].items() if found == 0]
-            reply = zone + "還沒做的巢：" + " ".join(not_found)
+            send_replay = True
+            if len(not_found) == 0:
+                reply = zone + "全部完成，收工！"
+            else:
+                reply = zone + "還沒做的巢：" + " ".join(not_found)
+
             break
     if zone_fit:
         pass
@@ -80,13 +85,19 @@ def handle_message(event):
                 numbers[zone][first_word] = 1
                 print("numbers[" + zone + "][" + first_word + "] = 1")
                 reply = "OK"
+                if zone.upper() == "GPS":
+                    reply = first_word + " 要重新定位"
+                    send_replay = True
 
-
+    if not send_replay and text[:4] == "小幫手 ":
         reply = ("你可以用的指令:\r\n" +
-            "1)小幫手 第一區舊巢 N1 N2 N3...\r\n" +
-            "2)小幫手 第一區?\r\n")
-
-    if "小幫手" in text:
+            "1)小幫手 第二區上\r\n" +
+            "2)小幫手 第二區下\r\n" +
+            "2)小幫手 重新定位\r\n")
+        send_replay = not (bot_state["last_reply"] == reply)
+        
+    if send_replay:
+        bot_state["last_reply"] = reply
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply))
