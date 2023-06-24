@@ -8,6 +8,14 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
+from last_nest import LastNest, CONST_LAST_NEST_INFO
+import re
+
+def insert_whitespace(text):
+    pattern = r'([A-Za-z0-9]+)([^A-Za-z0-9]+)'
+    result = re.sub(pattern, r'\1 \2', text)
+    return result
+
 CHANNEL_ACCESS_TOKEN="tYwlAaQYoTCz/GHvwSb4fuGC2vK7vbzlpbabJpzxzgmuEUCt5VrN73m4T6cDEjjWTjbx7Ncpe5PxiF6uiDSQ+IbnbHTsNLJNp4wTfC2nKnGS9AqvvLO3t1j3gYEt2/PWopnjcsSYitYmv4nk1UZIfwdB04t89/1O/w1cDnyilFU="
 CHANNEL_SECRET="28dd0637edacefb7347eddee58849386"
 
@@ -22,6 +30,15 @@ handler = WebhookHandler(CHANNEL_SECRET)
 numbers = {}
 bot_state = {}
 bot_state["last_reply"] = ""
+
+last_nest = LastNest()
+last_nest.setData(CONST_LAST_NEST_INFO)
+last_nest.parseInfo()
+
+@app.route("/live", methods=['GET'])
+def live():
+    return 'OK'
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # Get X-Line-Signature header value
@@ -39,7 +56,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     text = (event.message.text + "").upper()
-    first_word = (text+"").strip().split()[0]
+    print("debug, insert_whitespace:[" + insert_whitespace(text) + "]")
+    first_word = (insert_whitespace(text)+"").strip().split()[0]
+    print("debug, first_word:[" + first_word + "]")
+    
     zones = ["第二區上", "第二區下", "GPS", "第四區"]    
     zone_fit = False
     send_replay = False
@@ -89,6 +109,14 @@ def handle_message(event):
                     reply = first_word + " 要重新定位"
                     send_replay = True
 
+                new_eggs = last_nest.get_line_eggs(first_word, insert_whitespace(text))
+                
+                if replay=="OK" and not new_eggs=="":
+                    old_egg = last_nest.get_old_egg(first_word)
+                    if not old_egg == "" and not new_eggs==old_egg:
+                        replay = first_word + " 上次是 " + last_eggs
+                        send_replay = True
+
     if not send_replay and text[:4] == "小幫手 ":
         reply = ("你可以用的指令:\r\n" +
             "1)小幫手 第二區上\r\n" +
@@ -103,4 +131,4 @@ def handle_message(event):
             TextSendMessage(text=reply))
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=6601)
+    app.run(host='0.0.0.0', port=3001)
