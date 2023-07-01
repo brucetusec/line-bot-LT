@@ -89,6 +89,14 @@ class LTChatBot:
                         old_eggs = self.last_nest.get_old_egg(first_word)
                         if not old_eggs == "" and not new_eggs==old_eggs:
                             if self.last_nest.is_alert(old_eggs, new_eggs):
+
+                                eggs_array = ["一顆", "兩顆","三顆","四顆","五顆","六顆","七顆"]
+                                eggs_array2 = ["1顆", "2顆","3顆","4顆","5顆","6顆","7顆"]
+                                if old_eggs in eggs_array:
+                                    for find_eg in range(len(eggs_array)):
+                                        if old_eggs == eggs_array[find_eg]:
+                                            old_eggs = eggs_array2[find_eg]
+
                                 reply = first_word + " 上次是" + old_eggs
                                 send_reply = True
 

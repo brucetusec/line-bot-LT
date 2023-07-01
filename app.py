@@ -12,7 +12,7 @@ from linebot.models import (
 
 from LTChatBot import LTChatBot
 import re
-
+from datetime import datetime
 
 CHANNEL_ACCESS_TOKEN="tYwlAaQYoTCz/GHvwSb4fuGC2vK7vbzlpbabJpzxzgmuEUCt5VrN73m4T6cDEjjWTjbx7Ncpe5PxiF6uiDSQ+IbnbHTsNLJNp4wTfC2nKnGS9AqvvLO3t1j3gYEt2/PWopnjcsSYitYmv4nk1UZIfwdB04t89/1O/w1cDnyilFU="
 CHANNEL_SECRET="28dd0637edacefb7347eddee58849386"
@@ -26,6 +26,28 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
 bot = LTChatBot()
+
+@app.route("/home", methods=['GET'])
+def home():
+    
+    # Get the current date and time
+    now = datetime.now()
+    # Format the date and time
+    formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
+
+    items = {}
+    zone_content = ""
+    for zone in bot.zones:
+       msg = bot.handle_message(f"小幫手 {zone}").reply
+       items[f"小幫手 {zone}"] = msg
+       zone_content += f"{msg}<br/> <hr>"
+       
+    head = ""
+    body = f"""2023 宜蘭小燕鷗調查小幫手<br/> {formatted_now} <br><hr><br>
+    {zone_content}
+    """
+
+    return f'<html><head>{head}</head><body>{body}</body></html>'
 
 @app.route("/live", methods=['GET'])
 def live():

@@ -5,10 +5,18 @@ import re
 def insert_whitespace(text):
     pattern = r'([A-Za-z0-9]+)([^A-Za-z0-9]+)'
     result = re.sub(pattern, r'\1 \2', text)
+    
+    pattern = r'([^A-Za-z]+)([A-Za-z]+)'
+    result = re.sub(pattern, r'\1 \2', result)
     return result
 
 def preprocess_text(text):
-    result = insert_whitespace(text)
+    text = text.replace("、", ",")
+    text = text.replace("，", ",")
+    text = text.replace(", ", ",")
+    text = text.replace("参", "三")
+    
+    result = insert_whitespace(text)    
 
     # Add the new functionality here
     result = re.sub(r',\s', r',', result)
