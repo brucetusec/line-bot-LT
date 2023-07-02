@@ -82,8 +82,8 @@ class LTexcelDef:
         cell.value = str(cell.value) + ("\n" if len(str(cell.value)) > 0 else "") + line
         #print(f"[{matched_nest_row}] {egg_cell}", " -- ", cell.value)
 
-#excel_filename = 'data/2023蛋數增長紀錄0625.xlsx'
-excel_filename = 'data/LT-input.xlsx' # 南澳
+excel_filename = 'data/2023蛋數增長紀錄0702.xlsx'
+#excel_filename = 'data/2023 南澳溪口小燕鷗調查紀錄表 (0625整理).xlsx' # 南澳
 line_msg_filename = 'data/LT-line-msg.txt'
 
 
@@ -176,7 +176,7 @@ for line in line_msgs:
 
 # Save the changes
 date_str = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-workbook.save(f'data/LT-output-{date_str}.xlsx')
+workbook.save(f'data/LT-output-last.xlsx')
 
 #bash delete all output 
 #find ./data/ -type f -name "*LT-output*.xlsx*" | xargs -d"\n" rm -f

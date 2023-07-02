@@ -85,7 +85,10 @@ class LastNest:
 
     def get_line_eggs(self, matched_nest, line, to_int=False):
         #print("debug: matched_nest/"+matched_nest, "line/"+line)
+        line = line.replace("*", ",")
         line_arr = self.preprocess_line(line).split(' ')
+        if line_arr[-1] == "新":
+            line_arr = line_arr[:-1]
         the_index = -1
         for m in range(len(line_arr)):
             if line_arr[m].upper() == matched_nest.upper():
@@ -96,7 +99,9 @@ class LastNest:
         eggs_info = ""
         if the_index > -1:
             eggs_info = line_arr[the_index] + ',' + (''.join(line_arr[the_index+1:]))
+            eggs_info = eggs_info.upper()
             eggs_info = eggs_info.replace(",新", ",")
+            eggs_info = eggs_info.replace("新", ",")
             eggs_info = eggs_info.replace(" ", "")
             eggs_info = eggs_info.replace(" ", "")
             eggs_info = eggs_info.replace(" ", "")
@@ -125,9 +130,8 @@ class LastNest:
                 elif f'{matched_nest},7' == eggs_info:
                     eggs_info = "七顆"
                     
-
         if not eggs_info in possible_result:
-            print("debug get_line_eggs ", line_arr)
+            #print("debug get_line_eggs ", line_arr, " eggs_info:",  eggs_info)
             return ""
 
         if to_int:
