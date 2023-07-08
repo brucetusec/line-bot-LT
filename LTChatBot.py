@@ -2,7 +2,7 @@
 from last_nest import LastNest
 from app_data import CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE
 import re
-
+import sys
 from data_preprocess import insert_whitespace, preprocess_text
 class BotReply:
     def __int__(self):
@@ -18,7 +18,7 @@ class LTChatBot:
 
         self.bot_state = {}
         self.bot_state["last_reply"] = ""
-        self.zones = ["第二區上", "第二區下", "GPS", "一巢區", "溪口沙洲", "獨立沙洲", "孤草區"]
+        self.zones = CONST_NEST_ZONE.keys()
         for key in self.zones:
             if key in CONST_NEST_ZONE:
                 self.load_old_nest(key, CONST_NEST_ZONE[key])        
@@ -37,7 +37,8 @@ class LTChatBot:
         text = (preprocess_text(text)+"").strip()
         first_word = text.split()[0]
     
-        print("debug, first_word:[" + first_word + "]")
+        print("debug, text:[" + text + "]")
+        sys.stdout.flush()
         
         zone_fit = False
         send_reply = False
@@ -45,7 +46,6 @@ class LTChatBot:
         
         for zone in self.zones:
             if not zone in self.numbers:
-                print('init zone:', zone)
                 self.numbers[zone] = {}
 
             if not zone_fit and "小幫手" in text and zone + "舊巢" in text:
@@ -74,13 +74,34 @@ class LTChatBot:
             pass
             
         else:
-            for zone in self.zones:
-                if first_word in self.numbers[zone]:
+            for zone in self.zones:                
+                if first_word in self.numbers[zone]:                    
                     self.numbers[zone][first_word] = 1
                     print("numbers[" + zone + "][" + first_word + "] is set")
+                    sys.stdout.flush()
                     reply = "OK"
+                    notify_zone_clear = ["第二區上","第二區下","GPS","過期","上次有雛","上週蛋數變少疑似成功",
+                        "一巢區","溪口沙洲","獨立沙洲","孤草區",]
                     if zone.upper() == "GPS":
                         reply = "❗❗❗" + first_word + " 要重新定位❗❗❗"
+                        send_reply = True
+                        notify_zone_clear = True
+                    if zone.upper() == "過期":
+                        reply = "❗❗❗" + first_word + " 過期失敗需收旗❗❗❗"
+                        send_reply = True                                                
+                    if zone.upper() == "上次有雛":
+                        reply = "❗" + first_word + " 上次有雛❗"
+                        send_reply = True
+                    if zone.upper() == "上週蛋數變少疑似成功":
+                        reply = "❗" + first_word + " 上週蛋數變少疑似成功"
+                        send_reply = True
+                    
+                    if zone.upper() == "中段一巢區需收旗":
+                        reply = "❗❗❗" + first_word + " 需收旗❗❗❗"
+                        send_reply = True
+                    
+                    if zone.upper() == "溪口段需收旗":
+                        reply = "❗❗❗" + first_word + " 需收旗❗❗❗"
                         send_reply = True
 
                     new_eggs = self.last_nest.get_line_eggs(first_word, text)
@@ -98,6 +119,15 @@ class LTChatBot:
                                             old_eggs = eggs_array2[find_eg]
 
                                 reply = first_word + " 上次是" + old_eggs
+                                send_reply = True
+
+                    if (zone in notify_zone_clear
+                        and not ("全部完成" in self.numbers[zone]
+                        and self.numbers[zone]["全部完成"] == 1)):
+                            not_found = [num for num, found in self.numbers[zone].items() if found == 0]
+                            if len(not_found) == 0:
+                                self.numbers[zone]["全部完成"] = 1
+                                reply = reply + "\n" + zone + "全部完成，收工！"
                                 send_reply = True
 
         if not send_reply and text[:4] == "小幫手 ":

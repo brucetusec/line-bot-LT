@@ -10,10 +10,19 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-from LTChatBot import LTChatBot
 import re
 from datetime import datetime
 
+print("app start", datetime.now())
+
+# datetime object containing current date and time
+#now = 
+#print("now =", now)
+## dd/mm/YY H:M:S
+#dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+#print("date and time =", dt_string)
+
+from LTChatBot import LTChatBot
 CHANNEL_ACCESS_TOKEN="tYwlAaQYoTCz/GHvwSb4fuGC2vK7vbzlpbabJpzxzgmuEUCt5VrN73m4T6cDEjjWTjbx7Ncpe5PxiF6uiDSQ+IbnbHTsNLJNp4wTfC2nKnGS9AqvvLO3t1j3gYEt2/PWopnjcsSYitYmv4nk1UZIfwdB04t89/1O/w1cDnyilFU="
 CHANNEL_SECRET="28dd0637edacefb7347eddee58849386"
 
