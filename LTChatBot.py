@@ -1,6 +1,6 @@
 
 from last_nest import LastNest
-from app_data import CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE
+from app_data import CONST_GPS, CONST_GPS_L, CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE
 import re
 import sys
 from data_preprocess import insert_whitespace, preprocess_text
@@ -13,8 +13,8 @@ class LTChatBot:
     def __init__(self):
         self.numbers = {}
         self.last_nest = LastNest()
-        self.last_nest.setData(CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS)
-        self.last_nest.parseInfo()
+        #self.last_nest.setData(CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS)
+        #self.last_nest.parseInfo()
 
         self.bot_state = {}
         self.bot_state["last_reply"] = ""
@@ -22,6 +22,8 @@ class LTChatBot:
         for key in self.zones:
             if key in CONST_NEST_ZONE:
                 self.load_old_nest(key, CONST_NEST_ZONE[key])        
+        print("❗❗❗小幫手舊巢蛋數資料:0702❗❗❗")
+        self.GPS_L_OFF = False
         return
     def load_old_nest(self, zone, info):
         self.numbers[zone] = {}
@@ -39,12 +41,37 @@ class LTChatBot:
     
         print("debug, text:[" + text + "]")
         sys.stdout.flush()
-        
+        reply_set = False
         zone_fit = False
         send_reply = False
         reply = ""
-        
+        if "關閉蘭陽" in text and "GPS" in text and "小幫手" in text:
+            self.GPS_L_OFF = True
+        if "打開蘭陽" in text and "GPS" in text and "小幫手" in text:
+            self.GPS_L_OFF = False
+        is_finding_nest = ("在哪" in text) or ("GPS" in text)
+        if text == "小幫手 GPS":
+            is_finding_nest = False
+        if is_finding_nest:
+            reply_set = True
+            send_reply = False
+            reply = ""
+            if first_word in CONST_GPS:
+                print("self.GPS_L_OFF: ", self.GPS_L_OFF)
+                print("first_word  : [" + first_word + "]")
+                print("first_word in CONST_GPS_L: ", first_word in CONST_GPS_L)
+                if self.GPS_L_OFF and first_word in CONST_GPS_L:
+                    pass
+                else:
+                    latitude = CONST_GPS[first_word].split(',')[0]
+                    longitude = CONST_GPS[first_word].split(',')[1]
+                    google_map_url = f"https://www.google.com/maps?q={latitude},{longitude}"
+                    reply = f"{first_word} 在這裡 {google_map_url}"
+                    send_reply = True
+            
         for zone in self.zones:
+            if reply_set:
+                continue
             if not zone in self.numbers:
                 self.numbers[zone] = {}
 
@@ -70,11 +97,11 @@ class LTChatBot:
                     else:
                         reply = zone + "還沒做的巢：" + " ".join(not_found)
                 break
-        if zone_fit:
+        if zone_fit or reply_set:
             pass
             
         else:
-            for zone in self.zones:                
+            for zone in self.zones:
                 if first_word in self.numbers[zone]:                    
                     self.numbers[zone][first_word] = 1
                     print("numbers[" + zone + "][" + first_word + "] is set")
@@ -82,13 +109,13 @@ class LTChatBot:
                     reply = "OK"
                     notify_zone_clear = ["第二區上","第二區下","GPS","過期","上次有雛","上週蛋數變少疑似成功",
                         "一巢區","溪口沙洲","獨立沙洲","孤草區",]
+                    is_flag_removed = ("拔" in text or "收" in text or "失敗" in text or "成功" in text)
                     if zone.upper() == "GPS":
                         reply = "❗❗❗" + first_word + " 要重新定位❗❗❗"
                         send_reply = True
-                        notify_zone_clear = True
-                    if zone.upper() == "過期":
+                    if zone.upper() == "過期" and not is_flag_removed:
                         reply = "❗❗❗" + first_word + " 過期失敗需收旗❗❗❗"
-                        send_reply = True                                                
+                        send_reply = True
                     if zone.upper() == "上次有雛":
                         reply = "❗" + first_word + " 上次有雛❗"
                         send_reply = True
@@ -96,11 +123,11 @@ class LTChatBot:
                         reply = "❗" + first_word + " 上週蛋數變少疑似成功"
                         send_reply = True
                     
-                    if zone.upper() == "中段一巢區需收旗":
+                    if zone.upper() == "中段一巢區需收旗" and not is_flag_removed:
                         reply = "❗❗❗" + first_word + " 需收旗❗❗❗"
                         send_reply = True
                     
-                    if zone.upper() == "溪口段需收旗":
+                    if zone.upper() == "溪口段需收旗" and not is_flag_removed:
                         reply = "❗❗❗" + first_word + " 需收旗❗❗❗"
                         send_reply = True
 
@@ -127,7 +154,10 @@ class LTChatBot:
                             not_found = [num for num, found in self.numbers[zone].items() if found == 0]
                             if len(not_found) == 0:
                                 self.numbers[zone]["全部完成"] = 1
-                                reply = reply + "\n" + zone + "全部完成，收工！"
+                                if reply == "OK":
+                                    reply = zone + "全部完成，收工！"
+                                else:
+                                    reply = reply + "\n" + zone + "全部完成，收工！"
                                 send_reply = True
 
         if not send_reply and text[:4] == "小幫手 ":

@@ -70,7 +70,7 @@ class LastNest:
             line_arr_upper=[_.upper() for _ in line_arr]
             matches = [_[0] for _ in re.findall(r'((N|L|KP|LR|SN)[0-9]{1,3})\b', line.upper())]
             
-            for nest_id in matches: #self.last_ids:
+            for nest_id in matches:
                 if nest_id in line_arr_upper:
                     index_of_nest_id_in_line = -1
                     for m in range(len(line_arr)):
@@ -78,9 +78,8 @@ class LastNest:
                             index_of_nest_id_in_line=m
                             break
                             
-                    if index_of_nest_id_in_line > -1:                        
-                        #egg_info = :index_of_nest_id_in_line+2]
-                        return line_arr[index_of_nest_id_in_line].upper()#egg_info[0].upper()
+                    if index_of_nest_id_in_line > -1:
+                        return line_arr[index_of_nest_id_in_line].upper()
         return ""
 
     def get_line_eggs(self, matched_nest, line, to_int=False):

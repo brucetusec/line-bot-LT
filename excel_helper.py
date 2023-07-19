@@ -82,8 +82,9 @@ class LTexcelDef:
         cell.value = str(cell.value) + ("\n" if len(str(cell.value)) > 0 else "") + line
         #print(f"[{matched_nest_row}] {egg_cell}", " -- ", cell.value)
 
-excel_filename = 'data/2023蛋數增長紀錄0702.xlsx'
-#excel_filename = 'data/2023 南澳溪口小燕鷗調查紀錄表 (0625整理).xlsx' # 南澳
+excel_filename = 'data/2023蛋數增長紀錄0702-臨時0709整理.xlsx'
+excel_filename = 'data/2023 南澳溪口小燕鷗調查紀錄表 (0716整理).xlsx' # 南澳
+
 line_msg_filename = 'data/LT-line-msg.txt'
 
 
@@ -113,8 +114,8 @@ with open(line_msg_filename, 'r') as file:
     line_msgs = [_.strip() for _ in file.readlines()]
 
 last_nest = LastNest()
-last_nest.setData(CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS)
-last_nest.parseInfo()
+#last_nest.setData(CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS)
+#last_nest.parseInfo()
 
 COLUMN_NEST_ID = -1
 for i in range(worksheet.max_column):    
