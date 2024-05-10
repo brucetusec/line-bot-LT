@@ -1,6 +1,6 @@
 
 from last_nest import LastNest
-from app_data import CONST_GPS, CONST_GPS_L, CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE
+from app_data import CONST_GPS, CONST_GPS_L, CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE, CONST_GROUPS
 import re
 import sys
 from data_preprocess import insert_whitespace, preprocess_text
@@ -10,7 +10,8 @@ class BotReply:
         self.send_reply = False
 
 class LTChatBot:
-    def __init__(self):
+    def __init__(self, line_bot_api):
+        self.line_bot_api = line_bot_api
         self.numbers = {}
         self.last_nest = LastNest()
         #self.last_nest.setData(CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS)
@@ -23,7 +24,7 @@ class LTChatBot:
             if key in CONST_NEST_ZONE:
                 self.load_old_nest(key, CONST_NEST_ZONE[key])        
         print("❗❗❗小幫手舊巢蛋數資料:0702❗❗❗")
-        self.GPS_L_OFF = False
+        self.GPS_L_ON = False
         return
     def load_old_nest(self, zone, info):
         self.numbers[zone] = {}
@@ -32,8 +33,7 @@ class LTChatBot:
         for nest_id in matches:
             self.numbers[zone][nest_id] = 0
         return
-    def handle_message(self, text):
-
+    def handle_message(self, text, env):
         text = (text + "").upper()
         original_text = text
         text = (preprocess_text(text)+"").strip()
@@ -46,9 +46,9 @@ class LTChatBot:
         send_reply = False
         reply = ""
         if "關閉蘭陽" in text and "GPS" in text and "小幫手" in text:
-            self.GPS_L_OFF = True
+            self.GPS_L_ON = False
         if "打開蘭陽" in text and "GPS" in text and "小幫手" in text:
-            self.GPS_L_OFF = False
+            self.GPS_L_ON = True
         is_finding_nest = ("在哪" in text) or ("GPS" in text)
         if text == "小幫手 GPS":
             is_finding_nest = False
@@ -57,10 +57,10 @@ class LTChatBot:
             send_reply = False
             reply = ""
             if first_word in CONST_GPS:
-                print("self.GPS_L_OFF: ", self.GPS_L_OFF)
+                print("self.GPS_L_ON: ", self.GPS_L_ON)
                 print("first_word  : [" + first_word + "]")
                 print("first_word in CONST_GPS_L: ", first_word in CONST_GPS_L)
-                if self.GPS_L_OFF and first_word in CONST_GPS_L:
+                if not self.GPS_L_ON and first_word in CONST_GPS_L:
                     pass
                 else:
                     latitude = CONST_GPS[first_word].split(',')[0]

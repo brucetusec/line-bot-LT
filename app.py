@@ -34,11 +34,35 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 # Initialize WebhookHandler with your Channel Secret
 handler = WebhookHandler(CHANNEL_SECRET)
 
-bot = LTChatBot()
+bots = {}
+def get_env(event):
+    # 取得群組 ID
+    group_id = event.source.group_id
+    try:
+        group_summary = self.line_bot_api.get_group_summary(group_id)
+        group_name = group_summary.group_name  # 群組名稱
+        # print("Group Name:", group_name)
+    except LineBotApiError as e:
+        # 處理錯誤
+        print("Error:", e)
+    for key in CONST_GROUPS:
+        if key in group_name:
+            group_name = key
+    print('群組:' + group_name)
+    if not group_name in bots:
+        print('create bot with group_name:' + group_name)
+        bots[group_name] = LTChatBot(line_bot_api)
+    env = {
+        'group_name': group_name
+        'bot': bots[group_name]
+    }
+    return env
 
 @app.route("/home", methods=['GET'])
 def home():
-    
+    # TODO: use env
+    bot = bots('南澳')
+
     # Get the current date and time
     now = datetime.now()
     # Format the date and time
@@ -78,7 +102,9 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    result = bot.handle_message(event.message.text)
+    env = get_env(event)
+    bot = env['bot']
+    result = bot.handle_message(event.message.text, env)
     if result.send_reply:
         line_bot_api.reply_message(
             event.reply_token,
