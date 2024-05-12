@@ -19,10 +19,20 @@ class LTdata:
 
 class LTexcelDef:
     def __init__(self, worksheet):
+        NEED_EMPTY_COLUMN_SPACE = 9
+
         #self.nest_id_column = False
         self.worksheet = worksheet
-        self.first_empty_column = worksheet.max_column+1
         self.error_msg = []
+
+        for i in range(worksheet.max_column+1):
+            content_of_n_columns = ""
+            for k in range(NEED_EMPTY_COLUMN_SPACE):
+                cell = self.getCell(i + k + 1, 1)
+                content_of_n_columns += str(cell.value) if cell.value else ""
+            if content_of_n_columns == "":
+                self.first_empty_column = i
+                break
 
     def getCell(self, col, row):
         return worksheet[f'{get_column_letter(col)}{row}']
@@ -31,15 +41,15 @@ class LTexcelDef:
         self.error_msg.append(line)
 
         #if self.nest_id_column:
-        cell = excelLT.getCell(excelLT.first_empty_column + 4, len(self.error_msg) + 1)
+        cell = self.getCell(self.first_empty_column + 4, len(self.error_msg) + 1)
         cell.value = nest_id
-        cell = excelLT.getCell(excelLT.first_empty_column + 5, len(self.error_msg) + 1)
+        cell = self.getCell(self.first_empty_column + 5, len(self.error_msg) + 1)
         cell.value = eggs
 
         column_offset = 5
         #if self.nest_id_column:
         column_offset = 6
-        cell = excelLT.getCell(excelLT.first_empty_column + column_offset, len(self.error_msg) + 1)
+        cell = self.getCell(self.first_empty_column + column_offset, len(self.error_msg) + 1)
         cell.value = line
 
     def append_error_line_msg(self, line):
@@ -48,14 +58,14 @@ class LTexcelDef:
         column_offset = 7
 
         self.error_msg.append(line)
-        cell = excelLT.getCell(excelLT.first_empty_column + column_offset, len(self.error_msg) + 1)
+        cell = self.getCell(self.first_empty_column + column_offset, len(self.error_msg) + 1)
         cell.value = line
 
     def append_match_nest(self, matched_nest_row, nest_id, line, eggs):
-        cell = excelLT.getCell(excelLT.first_empty_column + 1, matched_nest_row)
+        cell = self.getCell(self.first_empty_column + 1, matched_nest_row)
         cell.value = nest_id
 
-        cell = excelLT.getCell(excelLT.first_empty_column + 2, matched_nest_row)
+        cell = self.getCell(self.first_empty_column + 2, matched_nest_row)
         if "一雛一蛋" in line or "一蛋一雛" in line or "1蛋1雛" in line or "1雛1蛋" in line:
             eggs = "1蛋1雛"
         elif "兩雛一蛋" in line or "一蛋兩雛" in line or "1蛋2雛" in line or "2雛1蛋" in line:
@@ -75,18 +85,15 @@ class LTexcelDef:
             cell.value = eggs
         egg_cell = cell.value
         #print(f"[Debug] {line} - {cell.value}")
-        cell = excelLT.getCell(excelLT.first_empty_column + 3, matched_nest_row)
+        cell = self.getCell(self.first_empty_column + 3, matched_nest_row)
         if cell.value==None:
             cell.value = ""
 
         cell.value = str(cell.value) + ("\n" if len(str(cell.value)) > 0 else "") + line
         #print(f"[{matched_nest_row}] {egg_cell}", " -- ", cell.value)
 
-excel_filename = 'data/2023蛋數增長紀錄0702-臨時0709整理.xlsx'
-excel_filename = 'data/2023 南澳溪口小燕鷗調查紀錄表 (0716整理).xlsx' # 南澳
-
-line_msg_filename = 'data/LT-line-msg.txt'
-
+excel_filename = 'data/2024蛋數增長紀錄.0511.南澳.xlsx'
+line_msg_filename = 'data/LT-line-msg.0511.南澳.txt'
 
 dataLT = LTdata()
 # Load the workbook and select the first worksheet
@@ -122,6 +129,7 @@ for i in range(worksheet.max_column):
     cell = excelLT.getCell(i + 1, 1)
     if "編號" in ("" + str(cell.value)):
         COLUMN_NEST_ID = i+1
+        break
 if COLUMN_NEST_ID <= 0:
     print("error 找不到名稱包含 編號 的欄位")
     exit()
