@@ -15,6 +15,8 @@ def preprocess_text(text):
     text = text.replace("，", ",")
     text = text.replace(", ", ",")
     text = text.replace("参", "三")
+    text = text.replace("中段一巢區", "中段第一巢區")
+    text = text.replace("中段二巢區", "中段第二巢區")
     
     result = insert_whitespace(text)    
 
@@ -29,4 +31,6 @@ def preprocess_text(text):
     #LL to L
     new_pattern = r'\bLL([0-9]+)\b'
     result = re.sub(new_pattern, r'L\1', result)
+    
+
     return result

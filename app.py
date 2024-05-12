@@ -12,6 +12,7 @@ from linebot.models import (
 
 import re
 from datetime import datetime
+from app_data import CONST_GROUPS
 
 print("app start", datetime.now())
 
@@ -38,24 +39,29 @@ bots = {}
 def get_env(event):
     # 取得群組 ID
     group_id = event.source.group_id
+    group_name = ""
     try:
-        group_summary = self.line_bot_api.get_group_summary(group_id)
+        group_summary = line_bot_api.get_group_summary(group_id)
         group_name = group_summary.group_name  # 群組名稱
         # print("Group Name:", group_name)
-    except LineBotApiError as e:
+    except Exception as e:
         # 處理錯誤
         print("Error:", e)
+    match_group_name = ""
     for key in CONST_GROUPS:
         if key in group_name:
-            group_name = key
+            match_group_name = key
+    group_name = match_group_name
     print('群組:' + group_name)
     if not group_name in bots:
         print('create bot with group_name:' + group_name)
         bots[group_name] = LTChatBot(line_bot_api)
-    env = {
-        'group_name': group_name
-        'bot': bots[group_name]
-    }
+    env = None
+    if group_name:
+        env = {
+            'group_name': group_name,
+            'bot': bots[group_name]
+        }
     return env
 
 @app.route("/home", methods=['GET'])
@@ -103,6 +109,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     env = get_env(event)
+    if not env:
+        print("env not found")
+        return
     bot = env['bot']
     result = bot.handle_message(event.message.text, env)
     if result.send_reply:
