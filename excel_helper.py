@@ -7,7 +7,13 @@ from openpyxl.utils import column_index_from_string, get_column_letter
 from last_nest import LastNest
 from app_data import CONST_LAST_NEST_IDS, CONST_LAST_NEST_INFO
 
-def get_next_column_letter(column_letter, increment=1):    
+
+# excel_filename = 'data/2024蛋數增長紀錄.0511.南澳.xlsx'
+# line_msg_filename = 'data/LT-line-msg.0511.南澳.txt'
+excel_filename = 'data/2024蛋數增長紀錄.0511.蘭陽.xlsx'
+line_msg_filename = 'data/LT-line-msg.0511.蘭陽.txt'
+
+def get_next_column_letter(column_letter, increment=1):
     column_num = column_index_from_string(column_letter)
     next_column_num = column_num + increment
     next_column_letter = get_column_letter(next_column_num)
@@ -31,7 +37,7 @@ class LTexcelDef:
                 cell = self.getCell(i + k + 1, 1)
                 content_of_n_columns += str(cell.value) if cell.value else ""
             if content_of_n_columns == "":
-                self.first_empty_column = i
+                self.first_empty_column = i+1
                 break
 
     def getCell(self, col, row):
@@ -92,8 +98,6 @@ class LTexcelDef:
         cell.value = str(cell.value) + ("\n" if len(str(cell.value)) > 0 else "") + line
         #print(f"[{matched_nest_row}] {egg_cell}", " -- ", cell.value)
 
-excel_filename = 'data/2024蛋數增長紀錄.0511.南澳.xlsx'
-line_msg_filename = 'data/LT-line-msg.0511.南澳.txt'
 
 dataLT = LTdata()
 # Load the workbook and select the first worksheet
@@ -113,7 +117,7 @@ columns.append("蛋數")
 columns.append("其他巢位訊息")
 columns.append("看不懂的訊息")
 
-for i in range(len(columns)):    
+for i in range(len(columns)):
     cell = excelLT.getCell(excelLT.first_empty_column + 1 + i, 1)
     cell.value = columns[i]
 
@@ -125,7 +129,7 @@ last_nest = LastNest()
 #last_nest.parseInfo()
 
 COLUMN_NEST_ID = -1
-for i in range(worksheet.max_column):    
+for i in range(worksheet.max_column):
     cell = excelLT.getCell(i + 1, 1)
     if "編號" in ("" + str(cell.value)):
         COLUMN_NEST_ID = i+1
@@ -162,7 +166,7 @@ for line in line_msgs:
         matched_nest_row = 0
         if nest_id in dataLT.nest_to_row:
             matched_nest_row = dataLT.nest_to_row[nest_id]
-        
+
         if len(nest_id) == 0:
             #看不懂的訊息 沒有已知的巢位編號
             if len(line_arr) > 1 and line_arr[1] == "小燕鷗調查小幫手":
@@ -173,11 +177,9 @@ for line in line_msgs:
                 excelLT.append_error_line_msg(line)
 
         elif matched_nest_row == 0:
-            #有巢位訊息但是excel裡面沒有該巢            
-            eggs = last_nest.get_line_eggs(nest_id, line, to_int=True)            
+            #有巢位訊息但是excel裡面沒有該巢
+            eggs = last_nest.get_line_eggs(nest_id, line, to_int=True)
             excelLT.append_missing_nest_msg(nest_id, line, eggs)
-            
-
         else:
             #有巢位訊息可以對應到excel的資料列
             eggs = last_nest.get_line_eggs(nest_id, line, to_int=True)
@@ -187,5 +189,5 @@ for line in line_msgs:
 date_str = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 workbook.save(f'data/LT-output-last.xlsx')
 
-#bash delete all output 
+#bash delete all output
 #find ./data/ -type f -name "*LT-output*.xlsx*" | xargs -d"\n" rm -f

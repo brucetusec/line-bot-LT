@@ -12,7 +12,7 @@ class LastNest:
             if eg in ["1","2","3","4","5","6","7"]:
                 eg = eggs_array[int(eg) - 1]
             self.old_eggs[key] = eg
-        
+
 
         #print(self.last_ids)
 
@@ -37,7 +37,7 @@ class LastNest:
                 pass
             elif line_arr[3] == "小燕鷗調查小幫手":
                 pass
-            else:                
+            else:
                 matches = [_[0] for _ in re.findall(r'((N|L|KP|LR|SN)[0-9]{1,3})\b', line.upper())]
                 for nest_id in matches: #self.last_ids:
                     if nest_id in line_arr:
@@ -45,11 +45,11 @@ class LastNest:
                         for m in range(len(line_arr)):
                             if line_arr[m] == nest_id:
                                 index_of_nest_id_in_line=m
-                                break 
+                                break
                         if index_of_nest_id_in_line > -1:
                             egg_info = line_arr[index_of_nest_id_in_line:index_of_nest_id_in_line+2]
                             #self.old_eggs[egg_info[0]] = (egg_info + [""])[1]
-                        
+
         with open("output.txt", "w") as file:
             for line in valid_lines:
                 file.write(line + "\n")
@@ -66,10 +66,8 @@ class LastNest:
         elif line_arr[3] == "小燕鷗調查小幫手":
             pass
         else:
-
             line_arr_upper=[_.upper() for _ in line_arr]
             matches = [_[0] for _ in re.findall(r'((N|L|KP|LR|SN)[0-9]{1,3})\b', line.upper())]
-            
             for nest_id in matches:
                 if nest_id in line_arr_upper:
                     index_of_nest_id_in_line = -1
@@ -77,7 +75,7 @@ class LastNest:
                         if line_arr_upper[m] == nest_id:
                             index_of_nest_id_in_line=m
                             break
-                            
+
                     if index_of_nest_id_in_line > -1:
                         return line_arr[index_of_nest_id_in_line].upper()
         return ""
@@ -104,7 +102,7 @@ class LastNest:
             eggs_info = eggs_info.replace(" ", "")
             eggs_info = eggs_info.replace(" ", "")
             eggs_info = eggs_info.replace(" ", "")
-            
+
             eggs_info = "一顆" if "1顆" in eggs_info or "一顆" in eggs_info else eggs_info
             eggs_info = "兩顆" if "2顆" in eggs_info or "兩顆" in eggs_info else eggs_info
             eggs_info = "兩顆" if "二顆" in eggs_info else eggs_info
@@ -112,7 +110,7 @@ class LastNest:
             eggs_info = "四顆" if "4顆" in eggs_info or "四顆" in eggs_info else eggs_info
             eggs_info = "五顆" if "5顆" in eggs_info or "五顆" in eggs_info else eggs_info
             eggs_info = "六顆" if "6顆" in eggs_info or "六顆" in eggs_info else eggs_info
-            eggs_info = "七顆" if "7顆" in eggs_info or "七顆" in eggs_info else eggs_info            
+            eggs_info = "七顆" if "7顆" in eggs_info or "七顆" in eggs_info else eggs_info
             if not eggs_info in possible_result:
                 if f'{matched_nest},1' == eggs_info:
                     eggs_info = "一顆"
@@ -128,7 +126,7 @@ class LastNest:
                     eggs_info = "六顆"
                 elif f'{matched_nest},7' == eggs_info:
                     eggs_info = "七顆"
-                    
+
         if not eggs_info in possible_result:
             #print("debug get_line_eggs ", line_arr, " eggs_info:",  eggs_info)
             return ""
@@ -166,5 +164,5 @@ class LastNest:
             if old_eggs_index > new_eggs_index:
                 return True
         return False
-    
+
 
