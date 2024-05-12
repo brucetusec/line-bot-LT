@@ -163,14 +163,16 @@ class LTChatBot:
         if not send_reply and text[:4] == "小幫手 ":
             reply = ("你可以用的指令:\r\n" +
                 "-- 南澳 --\r\n" +
-                "1)小幫手 第二區上\r\n" +
-                "2)小幫手 第二區下\r\n" +
+                "1)小幫手 沙灘區\r\n" +
+                "2)小幫手 溪床區\r\n" +
                 "3)小幫手 GPS\r\n" +
                 "-- 蘭陽溪口 --\r\n" +
-                "1)小幫手 一巢區\r\n" +
-                "2)小幫手 溪口沙洲\r\n" +
-                "3)小幫手 獨立沙洲\r\n" +
-                "4)小幫手 孤草區\r\n")
+                "1)小幫手 溪口沙洲\r\n" +
+                "2)小幫手 獨立沙洲\r\n" +
+                "3)小幫手 草原區\r\n" +
+                "4)小幫手 中段一巢區\r\n" +
+                "5)小幫手 中段二巢區\r\n")
+
             send_reply = not (self.bot_state["last_reply"] == reply)
             send_reply = False
 
