@@ -21,7 +21,7 @@ def preprocess_text(text):
     result = insert_whitespace(text)
 
     before = result + ""
-    result = re.sub(r'[a-z|A-Z]([0-9]+) -', r'L\1 ', result)
+    result = re.sub(r'([a-z|A-Z])([0-9]+) -', r'\1\2 ', result)
 
     # Add the new functionality here
     result = re.sub(r',\s', r',', result)

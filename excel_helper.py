@@ -174,10 +174,12 @@ for line in line_msgs:
             elif len(line_arr) > 1 and "已收回訊息" in line_arr[1]:
                 pass
             else:
+                last_nest.get_line_nest_id(line) #, verbose=1)
                 excelLT.append_error_line_msg(line)
 
         elif matched_nest_row == 0:
             #有巢位訊息但是excel裡面沒有該巢
+            print(f'missing nest:[{nest_id}], msg:{line}')
             eggs = last_nest.get_line_eggs(nest_id, line, to_int=True)
             excelLT.append_missing_nest_msg(nest_id, line, eggs)
         else:

@@ -54,10 +54,12 @@ class LastNest:
             for line in valid_lines:
                 file.write(line + "\n")
 
-    def get_line_nest_id(self, line):
+    def get_line_nest_id(self, line, verbose=0):
         line = self.preprocess_line(line)
         line_arr = line.split(' ')
         line_arr = [_ for _ in line_arr if len(_) > 0]
+        if (verbose):
+            print(f'get_line_nest_id: line_arr:{line_arr}')
 
         if len(line_arr) < 4:
             pass
@@ -67,9 +69,17 @@ class LastNest:
             pass
         else:
             line_arr_upper=[_.upper() for _ in line_arr]
+            if (verbose):
+                print(f'get_line_nest_id: line_arr_upper:{line_arr_upper}')
             matches = [_[0] for _ in re.findall(r'((N|L|KP|LR|SN)[0-9]{1,3})\b', line.upper())]
+            
+            if (verbose):
+                print(f'get_line_nest_id: matches:{matches}')
+                print(f'get_line_nest_id: line_arr_upper:{line_arr_upper}')
             for nest_id in matches:
                 if nest_id in line_arr_upper:
+                    if (verbose):
+                        print(f'get_line_nest_id: found nest_id:`{nest_id}` is in line_arr_upper')
                     index_of_nest_id_in_line = -1
                     for m in range(len(line_arr)):
                         if line_arr_upper[m] == nest_id:

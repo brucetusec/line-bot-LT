@@ -23,8 +23,8 @@ class LTChatBot:
         for key in self.zones:
             if key in CONST_NEST_ZONE:
                 self.load_old_nest(key, CONST_NEST_ZONE[key])        
-        print("❗❗❗小幫手舊巢蛋數資料:0702❗❗❗")
-        self.GPS_L_ON = False
+        print("❗❗❗小幫手舊巢蛋數資料:0511 ❗❗❗")
+        self.GPS_L_ON = True
         return
     def load_old_nest(self, zone, info):
         self.numbers[zone] = {}
@@ -56,15 +56,15 @@ class LTChatBot:
             reply_set = True
             send_reply = False
             reply = ""
-            if first_word in CONST_GPS:
+            if first_word in env['gps']:
                 print("self.GPS_L_ON: ", self.GPS_L_ON)
                 print("first_word  : [" + first_word + "]")
-                print("first_word in CONST_GPS_L: ", first_word in CONST_GPS_L)
-                if not self.GPS_L_ON and first_word in CONST_GPS_L:
+                # print("first_word in CONST_GPS_L: ", first_word in CONST_GPS_L)
+                if not self.GPS_L_ON and env['group_name']=='蘭陽':
                     pass
                 else:
-                    latitude = CONST_GPS[first_word].split(',')[0]
-                    longitude = CONST_GPS[first_word].split(',')[1]
+                    latitude = env['gps'][first_word].split(',')[0].strip().strip('(').strip(')')
+                    longitude = env['gps'][first_word].split(',')[1].strip().strip('(').strip(')')
                     google_map_url = f"https://www.google.com/maps?q={latitude},{longitude}"
                     reply = f"{first_word} 在這裡 {google_map_url}"
                     send_reply = True

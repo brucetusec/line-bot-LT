@@ -1,0 +1,215 @@
+bash: /home/ubuntu/line-bot-LT/.venv/bin/python: No such file or directory
+bash: /home/ubuntu/line-bot-LT/.venv/bin/python: No such file or directory
+Traceback (most recent call last):
+  File "/home/ubuntu/line-bot-LT/app.py", line 2, in <module>
+    from flask import Flask, request, abort
+ModuleNotFoundError: No module named 'flask'
+bash: /home/ubuntu/line-bot-LT/.venv/bin/python: No such file or directory
+bash: /home/ubuntu/line-bot-LT/.venv/bin/python: No such file or directory
+Traceback (most recent call last):
+  File "/home/ubuntu/line-bot-LT/app.py", line 2, in <module>
+    from flask import Flask, request, abort
+ModuleNotFoundError: No module named 'flask'
+/home/ubuntu/line-bot-LT/app.py:32: LineBotSdkDeprecatedIn30: Call to deprecated class LineBotApi. (Use v3 class; linebot.v3.<feature>. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+/home/ubuntu/line-bot-LT/app.py:35: LineBotSdkDeprecatedIn30: Call to deprecated class WebhookHandler. (Use 'from linebot.v3.webhook import WebhookHandler' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  handler = WebhookHandler(CHANNEL_SECRET)
+app start 2024-05-09 14:47:44.984830
+一巢區 old count: 145
+一巢區 new count: 19
+一巢區 L359 L465 L505 L506 L451 L414 L471 L415 L419 L416 KP34 SN14 L515 SN15 LR31 L476 L464 SN23 OS1
+溪口沙洲 old count: 84
+溪口沙洲 new count: 9
+溪口沙洲 KP44 L461 L381 L491 L530 L474 L457 L454 L458
+獨立沙洲 old count: 29
+獨立沙洲 new count: 20
+獨立沙洲 L493 L495 L463 L462 L467 L469 L468 L537 L481 L536 L538 L531 L459 L466 L475 L456 L477 L478 L480 L486
+孤草區 old count: 2
+孤草區 new count: 2
+孤草區 SN21 SN22
+第二區上 old count: 16
+第二區上 new count: 10
+第二區上 N44 N123 N130 N170 N171 N172 SN27 SN28 SN48 SN46
+第二區下 old count: 48
+第二區下 new count: 15
+第二區下 N55 N126 N129 N132 N135 N137 N147 N155 N160 N161 N166 N181 N199 N201 SN49
+GPS old count: 1
+GPS new count: 1
+GPS SN46
+過期 old count: 3
+過期 new count: 3
+過期 N44 N155 N55
+上次有雛 old count: 0
+上次有雛 new count: 0
+上次有雛 
+上週蛋數變少疑似成功 old count: 0
+上週蛋數變少疑似成功 new count: 0
+上週蛋數變少疑似成功 
+❗❗❗小幫手舊巢蛋數資料:0702❗❗❗
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3001
+ * Running on http://172.31.8.232:3001
+[33mPress CTRL+C to quit[0m
+debug, text:[小幫手]
+127.0.0.1 - - [09/May/2024 14:48:00] "POST /callback HTTP/1.0" 200 -
+debug, text:[小幫手 第二區下]
+/home/ubuntu/line-bot-LT/app.py:83: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(
+127.0.0.1 - - [09/May/2024 14:48:16] "POST /callback HTTP/1.0" 200 -
+127.0.0.1 - - [09/May/2024 14:48:33] "[33mGET /.env HTTP/1.0[0m" 404 -
+127.0.0.1 - - [09/May/2024 14:48:36] "[33mPOST / HTTP/1.0[0m" 404 -
+debug, text:[SN21 GPS]
+127.0.0.1 - - [09/May/2024 14:49:27] "POST /callback HTTP/1.0" 200 -
+/home/ubuntu/line-bot-LT/app.py:32: LineBotSdkDeprecatedIn30: Call to deprecated class LineBotApi. (Use v3 class; linebot.v3.<feature>. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+/home/ubuntu/line-bot-LT/app.py:35: LineBotSdkDeprecatedIn30: Call to deprecated class WebhookHandler. (Use 'from linebot.v3.webhook import WebhookHandler' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  handler = WebhookHandler(CHANNEL_SECRET)
+app start 2024-05-09 14:51:58.352156
+一巢區 old count: 145
+一巢區 new count: 19
+一巢區 L359 L465 L505 L506 L451 L414 L471 L415 L419 L416 KP34 SN14 L515 SN15 LR31 L476 L464 SN23 OS1
+溪口沙洲 old count: 84
+溪口沙洲 new count: 9
+溪口沙洲 KP44 L461 L381 L491 L530 L474 L457 L454 L458
+獨立沙洲 old count: 29
+獨立沙洲 new count: 20
+獨立沙洲 L493 L495 L463 L462 L467 L469 L468 L537 L481 L536 L538 L531 L459 L466 L475 L456 L477 L478 L480 L486
+孤草區 old count: 2
+孤草區 new count: 2
+孤草區 SN21 SN22
+第二區上 old count: 16
+第二區上 new count: 10
+第二區上 N44 N123 N130 N170 N171 N172 SN27 SN28 SN48 SN46
+第二區下 old count: 48
+第二區下 new count: 15
+第二區下 N55 N126 N129 N132 N135 N137 N147 N155 N160 N161 N166 N181 N199 N201 SN49
+GPS old count: 1
+GPS new count: 1
+GPS SN46
+過期 old count: 3
+過期 new count: 3
+過期 N44 N155 N55
+上次有雛 old count: 0
+上次有雛 new count: 0
+上次有雛 
+上週蛋數變少疑似成功 old count: 0
+上週蛋數變少疑似成功 new count: 0
+上週蛋數變少疑似成功 
+❗❗❗小幫手舊巢蛋數資料:0702❗❗❗
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3001
+ * Running on http://172.31.8.232:3001
+[33mPress CTRL+C to quit[0m
+debug, text:[SN21 GPS]
+127.0.0.1 - - [09/May/2024 14:52:03] "POST /callback HTTP/1.0" 200 -
+self.GPS_L_ON:  False
+first_word  : [SN21]
+first_word in CONST_GPS_L:  True
+debug, text:[小幫手 打開蘭陽 GPS]
+127.0.0.1 - - [09/May/2024 14:52:08] "POST /callback HTTP/1.0" 200 -
+debug, text:[SN21 GPS]
+/home/ubuntu/line-bot-LT/app.py:83: LineBotSdkDeprecatedIn30: Call to deprecated method reply_message. (Use 'from linebot.v3.messaging import MessagingApi' and 'MessagingApi(...).reply_message(...)' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api.reply_message(
+127.0.0.1 - - [09/May/2024 14:52:10] "POST /callback HTTP/1.0" 200 -
+self.GPS_L_ON:  True
+first_word  : [SN21]
+first_word in CONST_GPS_L:  True
+debug, text:[小幫手 關閉蘭陽 GPS]
+127.0.0.1 - - [09/May/2024 14:52:18] "POST /callback HTTP/1.0" 200 -
+debug, text:[SN21 GPS]
+127.0.0.1 - - [09/May/2024 14:52:20] "POST /callback HTTP/1.0" 200 -
+/home/ubuntu/line-bot-LT/app.py:32: LineBotSdkDeprecatedIn30: Call to deprecated class LineBotApi. (Use v3 class; linebot.v3.<feature>. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+/home/ubuntu/line-bot-LT/app.py:35: LineBotSdkDeprecatedIn30: Call to deprecated class WebhookHandler. (Use 'from linebot.v3.webhook import WebhookHandler' instead. See https://github.com/line/line-bot-sdk-python/blob/master/README.rst for more details.) -- Deprecated since version 3.0.0.
+  handler = WebhookHandler(CHANNEL_SECRET)
+app start 2024-05-10 02:57:31.386993
+一巢區 old count: 145
+一巢區 new count: 19
+一巢區 L359 L465 L505 L506 L451 L414 L471 L415 L419 L416 KP34 SN14 L515 SN15 LR31 L476 L464 SN23 OS1
+溪口沙洲 old count: 84
+溪口沙洲 new count: 9
+溪口沙洲 KP44 L461 L381 L491 L530 L474 L457 L454 L458
+獨立沙洲 old count: 29
+獨立沙洲 new count: 20
+獨立沙洲 L493 L495 L463 L462 L467 L469 L468 L537 L481 L536 L538 L531 L459 L466 L475 L456 L477 L478 L480 L486
+孤草區 old count: 2
+孤草區 new count: 2
+孤草區 SN21 SN22
+第二區上 old count: 16
+第二區上 new count: 10
+第二區上 N44 N123 N130 N170 N171 N172 SN27 SN28 SN48 SN46
+第二區下 old count: 48
+第二區下 new count: 15
+第二區下 N55 N126 N129 N132 N135 N137 N147 N155 N160 N161 N166 N181 N199 N201 SN49
+GPS old count: 1
+GPS new count: 1
+GPS SN46
+過期 old count: 3
+過期 new count: 3
+過期 N44 N155 N55
+上次有雛 old count: 0
+上次有雛 new count: 0
+上次有雛 
+上週蛋數變少疑似成功 old count: 0
+上週蛋數變少疑似成功 new count: 0
+上週蛋數變少疑似成功 
+❗❗❗小幫手舊巢蛋數資料:0702❗❗❗
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3001
+ * Running on http://172.31.8.232:3001
+[33mPress CTRL+C to quit[0m
+[2024-05-10 02:57:42,521] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ubuntu/line-bot-LT/app.py", line 73, in callback
+    handler.handle(body, signature)
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+  File "/home/ubuntu/line-bot-LT/app.py", line 81, in handle_message
+    result = bot.handle_message(event.message.text, event)
+  File "/home/ubuntu/line-bot-LT/LTChatBot.py", line 38, in handle_message
+    group_id = event.source.groupId
+AttributeError: 'SourceGroup' object has no attribute 'groupId'
+127.0.0.1 - - [10/May/2024 02:57:42] "[35m[1mPOST /callback HTTP/1.0[0m" 500 -
+127.0.0.1 - - [10/May/2024 02:58:25] "[33mGET /stream?streams=btcusdt@depth HTTP/1.0[0m" 404 -
+127.0.0.1 - - [10/May/2024 02:58:26] "POST /callback HTTP/1.0" 200 -
+[2024-05-10 02:58:29,646] ERROR in app: Exception on /callback [POST]
+Traceback (most recent call last):
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ubuntu/line-bot-LT/app.py", line 73, in callback
+    handler.handle(body, signature)
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/linebot/webhook.py", line 278, in handle
+    self.__invoke_func(func, event, payload)
+  File "/home/ubuntu/line-bot-LT/.venv/lib/python3.10/site-packages/linebot/webhook.py", line 290, in __invoke_func
+    func(event)
+  File "/home/ubuntu/line-bot-LT/app.py", line 81, in handle_message
+    result = bot.handle_message(event.message.text, event)
+  File "/home/ubuntu/line-bot-LT/LTChatBot.py", line 38, in handle_message
+    group_id = event.source.groupId
+AttributeError: 'SourceGroup' object has no attribute 'groupId'
+127.0.0.1 - - [10/May/2024 02:58:29] "[35m[1mPOST /callback HTTP/1.0[0m" 500 -

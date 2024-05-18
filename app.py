@@ -12,8 +12,10 @@ from linebot.models import (
 
 import re
 from datetime import datetime
-from app_data import CONST_GROUPS
+from app_data import CONST_GROUPS, CONST_GPS
 
+from LTChatBot import LTChatBot
+# from app_data import CONST_GPS, CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE, CONST_GROUPS
 print("app start", datetime.now())
 
 # datetime object containing current date and time
@@ -22,8 +24,6 @@ print("app start", datetime.now())
 ## dd/mm/YY H:M:S
 #dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 #print("date and time =", dt_string)
-
-from LTChatBot import LTChatBot
 CHANNEL_ACCESS_TOKEN="tYwlAaQYoTCz/GHvwSb4fuGC2vK7vbzlpbabJpzxzgmuEUCt5VrN73m4T6cDEjjWTjbx7Ncpe5PxiF6uiDSQ+IbnbHTsNLJNp4wTfC2nKnGS9AqvvLO3t1j3gYEt2/PWopnjcsSYitYmv4nk1UZIfwdB04t89/1O/w1cDnyilFU="
 CHANNEL_SECRET="28dd0637edacefb7347eddee58849386"
 
@@ -60,8 +60,12 @@ def get_env(event):
     if group_name:
         env = {
             'group_name': group_name,
-            'bot': bots[group_name]
+            'bot': bots[group_name],
+            'gps': {},
         }
+        if group_name in CONST_GPS:
+            env['gps'] = CONST_GPS[group_name]
+    env['group_id'] = group_id
     return env
 
 @app.route("/home", methods=['GET'])
@@ -112,12 +116,22 @@ def handle_message(event):
     if not env:
         print("env not found")
         return
-    bot = env['bot']
-    result = bot.handle_message(event.message.text, env)
-    if result.send_reply:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=result.reply))
+    allow_group_ids = [
+        'C9c9cd134327f047948521cb501c640d6', # group_id:C9c9cd134327f047948521cb501c640d6 測試群南澳
+        'Ccda26746dc264948bee8bc6c7b845354', # group_id:Ccda26746dc264948bee8bc6c7b845354 測試群蘭陽
+        'C8647aabcb3e83432a72ee92097d05922', # group_id:C8647aabcb3e83432a72ee92097d05922 小幫手測試區(3)
+        'C385da56e176f8a212525675263ef61b8', # group_id:C385da56e176f8a212525675263ef61b8 0518蘭陽
+        'Ca5a660292a54a3fc188d585954a5fa33', # group_id:Ca5a660292a54a3fc188d585954a5fa33 0518南澳
+    ]
+    if not env['group_id'] in allow_group_ids:
+        print(f"group_id:{env['group_id']} with gruop_name:{env['group_name']} is not in white list")
+    else:
+        bot = env['bot']
+        result = bot.handle_message(event.message.text, env)
+        if result.send_reply:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=result.reply))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3001)
