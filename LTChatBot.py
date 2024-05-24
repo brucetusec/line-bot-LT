@@ -1,6 +1,6 @@
 
 from last_nest import LastNest
-from app_data import CONST_GPS, CONST_GPS_L, CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE, CONST_GROUPS
+from app_data import CONST_GPS, CONST_GPS_L, CONST_LAST_NEST_INFO, CONST_LAST_NEST_IDS, CONST_NEST_ZONE, CONST_GROUPS, CONST_NEST_GROUP_REMIND
 import re
 import sys
 from data_preprocess import insert_whitespace, preprocess_text
@@ -107,8 +107,9 @@ class LTChatBot:
                     print("numbers[" + zone + "][" + first_word + "] is set")
                     sys.stdout.flush()
                     reply = "OK"
-                    notify_zone_clear = ["第二區上","第二區下","GPS","過期","上次有雛","上週蛋數變少疑似成功",
-                        "一巢區","溪口沙洲","獨立沙洲","孤草區",]
+                    notify_zone_clear = CONST_NEST_ZONE.keys()
+                    # ["第二區上","第二區下","GPS","過期","上次有雛","上週蛋數變少疑似成功",
+                    #     "一巢區","溪口沙洲","獨立沙洲","孤草區",]
                     is_flag_removed = ("拔" in text or "收" in text or "失敗" in text or "成功" in text)
                     if zone.upper() == "GPS":
                         reply = "❗❗❗" + first_word + " 要重新定位❗❗❗"
@@ -159,6 +160,22 @@ class LTChatBot:
                                 else:
                                     reply = reply + "\n" + zone + "全部完成，收工！"
                                 send_reply = True
+            if env['group_name'] in CONST_NEST_GROUP_REMIND:
+                nest_is_ok = 0
+                for zone in self.zones:
+                    if first_word in self.numbers[zone]:
+                        if self.numbers[zone][first_word] == 1:
+                            nest_is_ok = 1
+                if nest_is_ok:
+                    for remind_message in CONST_NEST_GROUP_REMIND[env['group_name']]:
+                        need_remind_nest_ids = CONST_NEST_GROUP_REMIND[env['group_name']][remind_message]
+                        if first_word in need_remind_nest_ids:
+                            need_remind_nest_ids.remove(first_word)
+                            if reply == "OK":
+                                reply = first_word + " " + remind_message
+                            else:
+                                reply = reply + "\n" + first_word + " " + remind_message
+                            send_reply = True
 
         if not send_reply and text[:4] == "小幫手 ":
             reply = ("你可以用的指令:\r\n" +

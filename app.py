@@ -58,20 +58,32 @@ def get_env(event):
         bots[group_name] = LTChatBot(line_bot_api)
     env = None
     if group_name:
-        env = {
-            'group_name': group_name,
-            'bot': bots[group_name],
-            'gps': {},
-        }
-        if group_name in CONST_GPS:
-            env['gps'] = CONST_GPS[group_name]
+        env = get_env_by_group_name(group_name)
+
     env['group_id'] = group_id
     return env
+
+def get_env_by_group_name(group_name):
+    env = {
+        'group_name': group_name,
+        'bot': bots[group_name],
+        'gps': {},
+    }
+    if group_name in CONST_GPS:
+        env['gps'] = CONST_GPS[group_name]
+    return env
+
+for group_name in CONST_GROUPS:
+    if not group_name in bots:
+        print('create bot with group_name:' + group_name)
+        bots[group_name] = LTChatBot(line_bot_api)
 
 @app.route("/home", methods=['GET'])
 def home():
     # TODO: use env
-    bot = bots('南澳')
+    env = get_env_by_group_name('蘭陽')
+    bot = bots['蘭陽']
+    env['group_id'] = 'Ccda26746dc264948bee8bc6c7b845354' # group_id:Ccda26746dc264948bee8bc6c7b845354 測試群蘭陽
 
     # Get the current date and time
     now = datetime.now()
@@ -81,7 +93,7 @@ def home():
     items = {}
     zone_content = ""
     for zone in bot.zones:
-       msg = bot.handle_message(f"小幫手 {zone}").reply
+       msg = bot.handle_message(f"小幫手 {zone}", env).reply
        items[f"小幫手 {zone}"] = msg
        zone_content += f"{msg}<br/> <hr>"
        
