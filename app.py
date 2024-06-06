@@ -134,6 +134,12 @@ def handle_message(event):
         'C8647aabcb3e83432a72ee92097d05922', # group_id:C8647aabcb3e83432a72ee92097d05922 小幫手測試區(3)
         'C385da56e176f8a212525675263ef61b8', # group_id:C385da56e176f8a212525675263ef61b8 0518蘭陽
         'Ca5a660292a54a3fc188d585954a5fa33', # group_id:Ca5a660292a54a3fc188d585954a5fa33 0518南澳
+
+        'C823a789f4c931e9d60a61c73feba0715', # group_id:C823a789f4c931e9d60a61c73feba0715 0525蘭陽
+        'Ce3296cf68613cadc36c14ed7c36932ca', # group_id:Ce3296cf68613cadc36c14ed7c36932ca 0526南澳
+
+        'C79f61e92804e644e152af271de5caa4a', # group_id:C79f61e92804e644e152af271de5caa4a 0601南澳
+        'Ca1cc456ea234125acde72c0eeed10284', # group_id:Ca1cc456ea234125acde72c0eeed10284 0602蘭陽
     ]
     if not env['group_id'] in allow_group_ids:
         print(f"group_id:{env['group_id']} with gruop_name:{env['group_name']} is not in white list")

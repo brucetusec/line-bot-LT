@@ -29,8 +29,10 @@ class LTChatBot:
     def load_old_nest(self, zone, info):
         self.numbers[zone] = {}
         # remember the numbers
-        matches = [_[0] for _ in re.findall(r'((N|L|KP|LR|SN)[0-9]{1,3})\b', info.upper())]
+        matches = [_[0] for _ in re.findall(r'((N|L|KP|LR|SN|OS)[0-9]{1,3})\b', info.upper())]
         for nest_id in matches:
+            if nest_id in self.numbers[zone]:
+                print(f"舊巢清單編號重複:{nest_id}")
             self.numbers[zone][nest_id] = 0
         return
     def handle_message(self, text, env):
@@ -88,7 +90,7 @@ class LTChatBot:
                 not_found = [num for num, found in self.numbers[zone].items() if found == 0]
                 send_reply = True
                 if len(not_found) == 0:
-                    reply = zone + "全部完成，收工！"
+                    reply = zone + "舊巢全部完成！"
                 else:
                     not_found_N = len(not_found)
                     if not_found_N > 20:
@@ -156,9 +158,9 @@ class LTChatBot:
                             if len(not_found) == 0:
                                 self.numbers[zone]["全部完成"] = 1
                                 if reply == "OK":
-                                    reply = zone + "全部完成，收工！"
+                                    reply = zone + "舊巢全部完成！"
                                 else:
-                                    reply = reply + "\n" + zone + "全部完成，收工！"
+                                    reply = reply + "\n" + zone + "舊巢全部完成！"
                                 send_reply = True
             if env['group_name'] in CONST_NEST_GROUP_REMIND:
                 nest_is_ok = 0

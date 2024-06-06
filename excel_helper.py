@@ -8,10 +8,10 @@ from last_nest import LastNest
 from app_data import CONST_LAST_NEST_IDS, CONST_LAST_NEST_INFO
 
 
-# excel_filename = 'data/2024蛋數增長紀錄.0518.南澳.xlsx'
-# line_msg_filename = 'data/LT-line-msg.0518.南澳.txt'
-excel_filename = 'data/2024蛋數增長紀錄.0518.蘭陽.xlsx'
-line_msg_filename = 'data/LT-line-msg.0518.蘭陽.txt'
+# excel_filename = 'data/2024蛋數增長紀錄.0526.南澳(草稿).xlsx'
+# line_msg_filename = 'data/LT-line-msg.0526.南澳.txt'
+excel_filename = 'data/2024蛋數增長紀錄.0602.蘭陽(草稿).xlsx'
+line_msg_filename = 'data/LT-line-msg.0602.蘭陽.txt'
 
 def get_next_column_letter(column_letter, increment=1):
     column_num = column_index_from_string(column_letter)
@@ -78,7 +78,9 @@ class LTexcelDef:
             eggs = "1蛋2雛"
         elif "一雛兩蛋" in line or "兩蛋一雛" in line or "2蛋1雛" in line or "1雛2蛋" in line:
             eggs = "2蛋1雛"
-        if "成功" in str(cell.value) and len(eggs)==0 and not "失敗" in line:
+        if 'line紀錄異常' in ('' + str(cell.value)):
+            pass
+        elif "成功" in str(cell.value) and len(str(eggs) + "")==0 and not "失敗" in line:
             pass
         elif "失敗" in line:
             cell.value = "失敗"
@@ -86,9 +88,10 @@ class LTexcelDef:
             cell.value = "成功"
         else:
             if "成功" in str(cell.value):
-                print("Error ! ")
-                exit()
-            cell.value = eggs
+                print("Warning ! ," f'調查記錄異常: line:{line}')
+                cell.value = 'line紀錄異常'
+            else:
+                cell.value = eggs
         egg_cell = cell.value
         #print(f"[Debug] {line} - {cell.value}")
         cell = self.getCell(self.first_empty_column + 3, matched_nest_row)
