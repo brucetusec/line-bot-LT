@@ -8,10 +8,10 @@ from last_nest import LastNest
 from app_data import CONST_LAST_NEST_IDS, CONST_LAST_NEST_INFO
 
 
-# excel_filename = 'data/2024蛋數增長紀錄.0526.南澳(草稿).xlsx'
-# line_msg_filename = 'data/LT-line-msg.0526.南澳.txt'
-excel_filename = 'data/2024蛋數增長紀錄.0602.蘭陽(草稿).xlsx'
-line_msg_filename = 'data/LT-line-msg.0602.蘭陽.txt'
+excel_filename = 'data/2024蛋數增長紀錄.0601.南澳(草稿).xlsx'
+line_msg_filename = 'data/LT-line-msg.0601.南澳.txt'
+# excel_filename = 'data/2024蛋數增長紀錄.0602.蘭陽(草稿).xlsx'
+# line_msg_filename = 'data/LT-line-msg.0602.蘭陽.txt'
 
 def get_next_column_letter(column_letter, increment=1):
     column_num = column_index_from_string(column_letter)

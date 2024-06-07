@@ -88,6 +88,44 @@ class LTChatBot:
                 zone_fit = True
                 # respond with numbers that haven't been found yet
                 not_found = [num for num, found in self.numbers[zone].items() if found == 0]
+
+                def sort_not_found(nest_list, env):
+                    sort_direction = "latitude-asc" # 南到北
+                    if (env['group_name']=='蘭陽'):
+                        sort_direction = "latitude-desc" # 北到南
+                    if (env['group_name']=='南澳'):
+                        sort_direction = "longitude-asc" # 東到西
+                    # implement a sort function to sort the nest_list
+                    # the nest_list is like ["N1", "N2", "N3", ...]
+                    def get_lat_and_long(nest_id):
+                        if nest_id in env['gps']:
+                            latitude = env['gps'][nest_id].split(',')[0].strip().strip('(').strip(')')
+                            longitude = env['gps'][nest_id].split(',')[1].strip().strip('(').strip(')')
+                            return (latitude, longitude)
+                        return ("", "")
+                    def sort_key(nest_id):
+                        latitude, longitude = get_lat_and_long(nest_id)
+                        if sort_direction == "latitude-asc":
+                            return latitude
+                        if sort_direction == "latitude-desc":
+                            return latitude
+                        return longitude
+                    if sort_direction == "latitude-asc":
+                        nest_list.sort(key=sort_key)
+                    if sort_direction == "latitude-desc":
+                        nest_list.sort(key=sort_key, reverse=True)
+                    if sort_direction == "longitude-asc":
+                        nest_list.sort(key=sort_key)
+                    if sort_direction == "longitude-desc":
+                        nest_list.sort(key=sort_key, reverse=True)
+                    # for debug, print the first 10 sorted nest_list, with their lat and long and nest_id
+                    print(f"sort_direction: {sort_direction}  ----------  ")
+                    for nest_id in nest_list[:10]:
+                        latitude, longitude = get_lat_and_long(nest_id)
+                        print(f"nest_id: {nest_id}, latitude: {latitude}, longitude: {longitude}")
+                    return nest_list
+
+                not_found = sort_not_found(not_found, env)
                 send_reply = True
                 if len(not_found) == 0:
                     reply = zone + "舊巢全部完成！"
