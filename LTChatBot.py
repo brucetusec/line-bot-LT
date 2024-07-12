@@ -119,10 +119,10 @@ class LTChatBot:
                     if sort_direction == "longitude-desc":
                         nest_list.sort(key=sort_key, reverse=True)
                     # for debug, print the first 10 sorted nest_list, with their lat and long and nest_id
-                    print(f"sort_direction: {sort_direction}  ----------  ")
-                    for nest_id in nest_list[:10]:
-                        latitude, longitude = get_lat_and_long(nest_id)
-                        print(f"nest_id: {nest_id}, latitude: {latitude}, longitude: {longitude}")
+                    # print(f"sort_direction: {sort_direction}  ----------  ")
+                    # for nest_id in nest_list[:10]:
+                    #     latitude, longitude = get_lat_and_long(nest_id)
+                    #     print(f"nest_id: {nest_id}, latitude: {latitude}, longitude: {longitude}")
                     return nest_list
 
                 not_found = sort_not_found(not_found, env)
@@ -163,14 +163,6 @@ class LTChatBot:
                     if zone.upper() == "上週蛋數變少疑似成功":
                         reply = "❗" + first_word + " 上週蛋數變少疑似成功"
                         send_reply = True
-                    
-                    if zone.upper() == "中段一巢區需收旗" and not is_flag_removed:
-                        reply = "❗❗❗" + first_word + " 需收旗❗❗❗"
-                        send_reply = True
-                    
-                    if zone.upper() == "溪口段需收旗" and not is_flag_removed:
-                        reply = "❗❗❗" + first_word + " 需收旗❗❗❗"
-                        send_reply = True
 
                     new_eggs = self.last_nest.get_line_eggs(first_word, text)
                     
@@ -201,20 +193,28 @@ class LTChatBot:
                                     reply = reply + "\n" + zone + "舊巢全部完成！"
                                 send_reply = True
             if env['group_name'] in CONST_NEST_GROUP_REMIND:
-                nest_is_ok = 0
-                for zone in self.zones:
-                    if first_word in self.numbers[zone]:
-                        if self.numbers[zone][first_word] == 1:
-                            nest_is_ok = 1
-                if nest_is_ok:
+                # nest_is_ok = 0
+                # for zone in self.zones:
+                #     if first_word in self.numbers[zone]:
+                #         if self.numbers[zone][first_word] == 1:
+                #             nest_is_ok = 1
+                if not is_finding_nest:
                     for remind_message in CONST_NEST_GROUP_REMIND[env['group_name']]:
                         need_remind_nest_ids = CONST_NEST_GROUP_REMIND[env['group_name']][remind_message]
+                        apply_remind_message = None
                         if first_word in need_remind_nest_ids:
+                            apply_remind_message = remind_message
+
+                        if apply_remind_message and "收旗" in apply_remind_message:
+                            if "收旗" in original_text:
+                                apply_remind_message = None
+
+                        if apply_remind_message:
                             need_remind_nest_ids.remove(first_word)
                             if reply == "OK":
-                                reply = first_word + " " + remind_message
+                                reply = first_word + " " + apply_remind_message
                             else:
-                                reply = reply + "\n" + first_word + " " + remind_message
+                                reply = reply + "\n" + first_word + " " + apply_remind_message
                             send_reply = True
 
         if not send_reply and text[:4] == "小幫手 ":

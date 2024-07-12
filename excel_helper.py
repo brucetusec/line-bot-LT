@@ -8,10 +8,10 @@ from last_nest import LastNest
 from app_data import CONST_LAST_NEST_IDS, CONST_LAST_NEST_INFO
 
 
-excel_filename = 'data/2024蛋數增長紀錄.0601.南澳(草稿).xlsx'
-line_msg_filename = 'data/LT-line-msg.0601.南澳.txt'
-# excel_filename = 'data/2024蛋數增長紀錄.0602.蘭陽(草稿).xlsx'
-# line_msg_filename = 'data/LT-line-msg.0602.蘭陽.txt'
+# excel_filename = 'data/2024蛋數增長紀錄.0622.南澳(草稿).xlsx'
+# line_msg_filename = 'data/LT-line-msg.0622.南澳.txt'
+excel_filename = 'data/2024蛋數增長紀錄.0706.南澳(草稿).xlsx'
+line_msg_filename = 'data/LT-line-msg.0706.南澳.txt'
 
 def get_next_column_letter(column_letter, increment=1):
     column_num = column_index_from_string(column_letter)
@@ -30,7 +30,7 @@ class LTexcelDef:
         #self.nest_id_column = False
         self.worksheet = worksheet
         self.error_msg = []
-
+        self.flag_pickup_nests = {}
         for i in range(worksheet.max_column+1):
             content_of_n_columns = ""
             for k in range(NEED_EMPTY_COLUMN_SPACE):
@@ -73,25 +73,34 @@ class LTexcelDef:
 
         cell = self.getCell(self.first_empty_column + 2, matched_nest_row)
         if "一雛一蛋" in line or "一蛋一雛" in line or "1蛋1雛" in line or "1雛1蛋" in line:
-            eggs = "1蛋1雛"
-        elif "兩雛一蛋" in line or "一蛋兩雛" in line or "1蛋2雛" in line or "2雛1蛋" in line:
-            eggs = "1蛋2雛"
+            eggs = "1雛1蛋"
         elif "一雛兩蛋" in line or "兩蛋一雛" in line or "2蛋1雛" in line or "1雛2蛋" in line:
-            eggs = "2蛋1雛"
+            eggs = "1雛2蛋"
+        elif "兩雛一蛋" in line or "一蛋兩雛" in line or "1蛋2雛" in line or "2雛1蛋" in line:
+            eggs = "2雛1蛋"
+        elif "1雛" in line:
+            eggs = "1雛"
+        elif "2雛" in line:
+            eggs = "2雛"
+        elif "3雛" in line:
+            eggs = "3雛"
         if 'line紀錄異常' in ('' + str(cell.value)):
             pass
         elif "成功" in str(cell.value) and len(str(eggs) + "")==0 and not "失敗" in line:
             pass
-        elif "失敗" in line:
+        elif "失敗" in line and len(str(eggs) + "")==0:
             cell.value = "失敗"
-        elif "成功" in line:
+        elif "成功" in line and len(str(eggs) + "")==0:
             cell.value = "成功"
         else:
-            if "成功" in str(cell.value):
+            if nest_id in self.flag_pickup_nests:
                 print("Warning ! ," f'調查記錄異常: line:{line}')
                 cell.value = 'line紀錄異常'
             else:
                 cell.value = eggs
+        if '收旗' in line:
+            self.flag_pickup_nests[nest_id] = 1
+
         egg_cell = cell.value
         #print(f"[Debug] {line} - {cell.value}")
         cell = self.getCell(self.first_empty_column + 3, matched_nest_row)

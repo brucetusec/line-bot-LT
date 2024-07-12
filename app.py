@@ -143,6 +143,21 @@ def handle_message(event):
 
         'C06f7ee36c23751ebd401ddc6d0ece368', # group_id:C06f7ee36c23751ebd401ddc6d0ece368 0608蘭陽
         'C80625719fbbb74d794937b9035c5f70c', # group_id:C80625719fbbb74d794937b9035c5f70c 0608南澳
+
+        'C8eff35559ff3d1cbf90f085653b4c926', # group_id:C8eff35559ff3d1cbf90f085653b4c926 0615蘭陽
+        'C4bf2b6372501701c7921bcaf8e97c5e9', # group_id:C4bf2b6372501701c7921bcaf8e97c5e9 0608南澳
+
+        'C8d86ef62b98336a01f5ae152135ee4cd', # group_id:C8d86ef62b98336a01f5ae152135ee4cd 0629蘭陽
+        'C8ba16a34b741484ae1109039f832bcc2', # group_id:C8ba16a34b741484ae1109039f832bcc2 0622南澳
+
+        'Cac1d6df01de4103a20e0f34d32da7fe7', # group_id:Cac1d6df01de4103a20e0f34d32da7fe7 0622蘭陽
+        'Cc95dc4bf21446e46cae06f25f39cbcd7', # group_id:Cc95dc4bf21446e46cae06f25f39cbcd7 0629南澳
+
+        'C29f7346b6f31c879b402355c4581bb76', # group_id:C29f7346b6f31c879b402355c4581bb76 0706蘭陽
+        'C808730398a102d604b28402906b917c1', # group_id:C808730398a102d604b28402906b917c1 0706南澳
+
+        'C2a005cf1851e6ba95c3adeed33b89f6c', # group_id:C2a005cf1851e6ba95c3adeed33b89f6c 0713蘭陽
+        'C5ab11e8cd03836ec1d5c6da7740b8212', # group_id:C5ab11e8cd03836ec1d5c6da7740b8212 0713南澳
     ]
     if not env['group_id'] in allow_group_ids:
         print(f"group_id:{env['group_id']} with gruop_name:{env['group_name']} is not in white list")
